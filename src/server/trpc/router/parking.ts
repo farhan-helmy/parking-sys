@@ -103,12 +103,14 @@ export const parkingRouter = router({
     ),
   createPrice: publicProcedure
     .input(z.object({
-      price: z.string()
+      price: z.string(),
+      subsequnce: z.string()
     }))
     .mutation(({ ctx, input }) => {
       const data = ctx.prisma.price.create({
         data: {
-          price: input?.price
+          price: input?.price,
+          subsequnce: input?.subsequnce
         }
       })
       console.log(data)
@@ -118,7 +120,8 @@ export const parkingRouter = router({
   updatePrice: publicProcedure
     .input(z.object({
       id: z.number(),
-      price: z.string()
+      price: z.string(),
+      subsequnce: z.string()
     }))
     .mutation(({ ctx, input }) => {
       const data = ctx.prisma.price.upsert({
@@ -126,10 +129,12 @@ export const parkingRouter = router({
           id: input?.id
         },
         create: {
-          price: input?.price
+          price: input?.price,
+          subsequnce: input?.subsequnce,
         },
         update: {
-          price: input?.price
+          price: input?.price,
+          subsequnce: input?.subsequnce,
         }
       })
       console.log(data)

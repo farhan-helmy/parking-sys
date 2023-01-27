@@ -29,8 +29,9 @@ model Parking {
 }
 
 model Price {
-  id    Int    @id @default(autoincrement())
-  price String @default("")
+  id         Int    @id @default(autoincrement())
+  price      String @default("")
+  subsequnce String @default("")
 }
 
 // Necessary for Next auth

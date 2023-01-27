@@ -1,5 +1,4 @@
-import { NextPage } from "next"
-import Link from "next/link";
+import type { NextPage } from "next"
 import { useEffect, useState } from "react";
 import { trpc } from "../utils/trpc";
 import { useRouter } from "next/router";

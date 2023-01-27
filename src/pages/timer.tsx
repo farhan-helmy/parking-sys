@@ -41,7 +41,12 @@ const Timer: NextPage = () => {
         const minutes = Math.floor(diff / (1000 * 60));
         const seconds = Math.floor(diff / 1000);
         // change the price from string to float
-        const price = hours * parseInt(getParkingPrice.data?.price as string);
+        let price: number;
+        if (hours === 0) {
+          price = parseInt(getParkingPrice.data?.price as string);
+        } else {
+          price = hours * parseInt(getParkingPrice.data?.subsequnce as string);
+        }
         setPriceAndTime(`You have parked for ${hours} hours, ${minutes} minutes and ${seconds} seconds. Your total price is ${price} ringgit`)
       })
       .catch((err) => {
@@ -58,17 +63,23 @@ const Timer: NextPage = () => {
     if (getCarTime.data?.status === "exit") {
       const now = new Date().toUTCString();
       setParkingEndTime(now);
-      const startTime = new Date(getCarTime.data?.start_time as string);
+      const startTime = new Date(getCarTime.data?.start_time);
       const endTime = new Date(now);
       const diff = endTime.getTime() - startTime.getTime();
       const hours = Math.floor(diff / (1000 * 60 * 60));
       const minutes = Math.floor(diff / (1000 * 60));
       const seconds = Math.floor(diff / 1000);
-      const price = hours * parseInt(getParkingPrice.data?.price as string);
+      let price: number;
+
+      if (hours === 0) {
+        price = parseInt(getParkingPrice.data?.price as string);
+      } else {
+        price = hours * parseInt(getParkingPrice.data?.subsequnce as string);
+      }
       setPrice(price);
       setPriceAndTime(`You have parked for ${hours} hours, ${minutes} minutes and ${seconds} seconds. Your total price is ${price} ringgit`)
     }
-  }, [getCarTime.data?.start_time, getCarTime.data?.status, getParkingPrice.data?.price])
+  }, [getCarTime.data?.start_time, getCarTime.data?.status, getParkingPrice.data?.price, getParkingPrice.data?.subsequnce])
 
   return (
     <>
@@ -87,6 +98,10 @@ const Timer: NextPage = () => {
             <div className="items-center justify-center text-center pb-3">
               <h1 className="font-bold text-4xl">Parking {getCarTime.data.plateNumber} in progress</h1>
               <h1 className="font-light text-xl">parking start time {getCarTime.data.start_time} </h1>
+
+              <p>Parking rate</p>
+              <p>per entry: RM{getParkingPrice.data?.price}</p>
+              <p>per subsequence hour: RM{getParkingPrice.data?.subsequnce}</p>
             </div>
           )}
           {getCarTime.data?.status === "" || getCarTime.data?.status === "paid" && (
@@ -116,7 +131,7 @@ const Timer: NextPage = () => {
             <button
               onClick={() => exitParking()}
               type="button"
-              className={`${getCarTime.data?.status === "exit" ? "hidden" : ""} mt-4 shadow-lg inline-flex items-center rounded-full border bg-red-600 p-6 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
+              className={`${getCarTime.data?.status === "exit" || getCarTime.data?.status === "" ? "hidden" : ""} mt-4 shadow-lg inline-flex items-center rounded-full border bg-red-600 p-6 text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2`}
             >
               <h1 className="font-bold">Exit</h1>
             </button>
