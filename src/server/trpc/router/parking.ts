@@ -19,6 +19,19 @@ export const parkingRouter = router({
       console.log(data)
       return data;
     }),
+  checkPlate: publicProcedure
+    .input(z.object({
+      plate: z.string()
+    }))
+    .query(({ ctx, input }) => {
+      const data = ctx.prisma.parking.findUnique({
+        where: {
+          plateNumber: input?.plate
+        }
+      })
+      console.log(data)
+      return data;
+    }),
   getCarTime: publicProcedure
     .input(z.object({
       plate: z.string()

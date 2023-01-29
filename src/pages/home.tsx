@@ -19,11 +19,20 @@ import { useRouter } from "next/router";
 */
 const Home: NextPage = () => {
   const [plate, setPlate] = useState("");
+  const [error, setError] = useState("")
   const addPlateNumber = trpc.parking.savePlate.useMutation();
   const router = useRouter()
+  const specialChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
   const handlePlateChange = (e: any) => {
     e.preventDefault();
-    addPlateNumber.mutate({ plate });
+    if (specialChar.test(plate)) {
+      setError("Please enter a valid plate number")
+      return
+    }
+    addPlateNumber.mutateAsync({ plate })
+    .catch(() => {
+      setError("Plate number already exist")
+      });
   }
 
   useEffect(() => {
@@ -68,6 +77,7 @@ const Home: NextPage = () => {
                     onChange={(e) => setPlate(e.target.value)}
                   />
                 </div>
+                {error && <p className="text-red-500 text-xs italic">{error}</p>}
               </div>
 
               <div>
