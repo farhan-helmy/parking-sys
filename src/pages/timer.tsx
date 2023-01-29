@@ -46,7 +46,7 @@ const Timer: NextPage = () => {
           price = parseInt(getParkingPrice.data?.price as string);
           setPriceAndTime(`You have parked for ${hours} hours, ${minutes} minutes and ${seconds} seconds. Your total price is ${price} ringgit`)
         } 
-        if (hours > 1) {
+        if (hours > 1 || hours === 1) {
           price = hours * parseInt(getParkingPrice.data?.subsequnce as string);
           setPriceAndTime(`You have parked for ${hours} hours, ${minutes} minutes and ${seconds} seconds. Your total price is ${price} ringgit`)
         }
